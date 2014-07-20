@@ -99,7 +99,7 @@ Are there differences in activity patterns between weekdays and weekends?
 
 get English weekdays independent from OS setup and then subset
 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 nona_dat$wd <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", 
   "Friday", "Saturday")[as.POSIXlt(nona_dat$date)$wd+1]
 
@@ -111,13 +111,26 @@ weekend_dat <- subset(nona_dat, nona_dat$wd == c("Saturday","Sunday"))
 
 
 get the mean
-```{r echo=TRUE}
+```{r, echo=TRUE}
 melt_week_interval    <- melt(week_dat,id= "interval", measure.vars = "steps")
 melt_weekend_interval <- melt(weekend_dat,id= "interval", measure.vars = "steps")
 
 mean_week   <- dcast(melt_week_interval, interval~variable,fun.aggregate = mean)
 mean_weekend<- dcast(melt_weekend_interval, interval~variable,fun.aggregate = mean)
 ```
+
+
+3. 5-minute interval that, on average, contains the maximum number of steps.
+
+
+```{r,echo=TRUE}
+melt_interval <- melt(nona_dat,id= "interval", measure.vars = "steps")
+mean_interval <- dcast(melt_interval, interval~variable,fun.aggregate = mean)
+mean_interval$interval[which(mean_interval$steps == max(mean_interval$steps))]
+
+```
+
+
 
 penalplot
 
